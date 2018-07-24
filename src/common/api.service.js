@@ -4,6 +4,17 @@ import VueAxios from 'vue-axios'
 import JwtService from '@/common/jwt.service'
 import { API_URL } from '@/common/config'
 
+// 创建axios实例
+const myservice = axios.create({
+  baseURL: API_URL, // api的base_url
+  timeout: 10000, // 请求超时时间
+  withCredentials: true,
+  responseType: 'json',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+})
+
 const ApiService = {
   init () {
     Vue.use(VueAxios, axios)
@@ -31,7 +42,8 @@ const ApiService = {
   },
 
   post (resource, params) {
-    return Vue.axios.post(`${resource}`, params)
+    console.log(resource)
+    return myservice.post(`${resource}`, params)
   },
 
   update (resource, slug, params) {
