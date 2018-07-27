@@ -38,7 +38,7 @@ const actions = {
   [REGISTER] (context, credentials) {
     return new Promise((resolve, reject) => {
       ApiService
-        .post('users', {user: credentials})
+        .post('users/', {user: credentials})
         .then(({data}) => {
           context.commit(SET_AUTH, data.user)
           resolve(data)
@@ -71,12 +71,13 @@ const actions = {
       bio,
       image
     }
+    const datau = {user}
     if (password) {
       user.password = password
     }
 
     return ApiService
-      .put('user', user)
+      .put('user/', datau)
       .then(({data}) => {
         context.commit(SET_AUTH, data.user)
         return data

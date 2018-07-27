@@ -25,3 +25,5 @@ Thumbs.db
 dist/
 test/unit/coverage
 test/e2e/reports
+
+package-lock.json
