@@ -62,6 +62,7 @@ const ApiService = {
         throw new Error(`[RWV] ApiService ${error}`)
       })
   }
+
 }
 
 export default ApiService

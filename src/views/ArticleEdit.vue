@@ -20,7 +20,7 @@
                   v-model="article.description"
                   placeholder="What's this article about?">
               </fieldset>
-              <fieldset class="form-group" style="width:100%;float:left;" :height="boxheight">
+              <fieldset class="form-group" style="width:100%;float:left;">
                  <markdown-editor id="contentEditor" ref="contentEditor" v-model="article.body"  :zIndex="20"  placeholder="这是一个markdown编辑器"></markdown-editor>
               </fieldset>
               <fieldset class="form-group" style="width:100%;float:left;">

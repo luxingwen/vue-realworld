@@ -11,6 +11,11 @@ import ApiService from '@/common/api.service'
 import DateFilter from '@/common/date.filter'
 import ErrorFilter from '@/common/error.filter'
 
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+Vue.use(Element)
+
 Vue.config.productionTip = false
 Vue.filter('date', DateFilter)
 Vue.filter('error', ErrorFilter)
@@ -32,5 +37,6 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  render: h => h(App)
 })
