@@ -31,7 +31,14 @@
       </div>
       <div class="row">
         <div class="col-xs-12 col-md-8 offset-md-2">
-          <RwvCommentEditor
+         
+          <RwvComment
+            v-for="(comment, index) in comments"
+            :slug="slug"
+            :comment="comment"
+            :key="index">
+          </RwvComment>
+           <RwvCommentEditor
             v-if="isAuthenticated"
             :slug="slug"
             :userImage="currentUser.image">
@@ -42,12 +49,6 @@
             <router-link :to="{ name: 'register' }">sign up</router-link>
             to add comments on this article.
           </p>
-          <RwvComment
-            v-for="(comment, index) in comments"
-            :slug="slug"
-            :comment="comment"
-            :key="index">
-          </RwvComment>
         </div>
       </div>
     </div>

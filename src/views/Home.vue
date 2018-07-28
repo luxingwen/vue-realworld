@@ -2,8 +2,8 @@
   <div class="home-page">
     <div class="banner">
       <div class="container">
-        <h1 class="logo-font">conduit</h1>
-        <p>A place to share your knowledge.</p>
+        <h1 class="logo-font">biggerforum</h1>
+        <p>一个有逼格的社区.</p>
       </div>
     </div>
     <div class="container page">
@@ -16,7 +16,7 @@
                   :to="{name: 'home-my-feed'}"
                   class="nav-link"
                   active-class="active">
-                  Your Feed
+                  我关注的
                 </router-link>
               </li>
               <li class="nav-item">
@@ -25,7 +25,7 @@
                   exact
                   class="nav-link"
                   active-class="active">
-                  Global Feed
+                  所有
                 </router-link>
               </li>
               <li class="nav-item" v-if="tag">

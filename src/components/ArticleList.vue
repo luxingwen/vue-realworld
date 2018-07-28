@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <div v-if="articles.length === 0" class="article-preview">
-        No articles are here... yet.
+        没有任何内容...
       </div>
       <rwv-article-preview
         v-for="(article, index) in articles"

@@ -3,10 +3,10 @@
     <div class="container">
       <router-link class="logo-font"
         :to="{ name: 'home', params: {} }">
-        conduit
+        biggerforum
       </router-link>
       <span class="attribution">
-        An interactive learning project from
+        power by
         <a target="blank" href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed under MIT.
       </span>
     </div>

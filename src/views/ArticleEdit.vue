@@ -20,15 +20,10 @@
                   v-model="article.description"
                   placeholder="What's this article about?">
               </fieldset>
-              <fieldset class="form-group">
-                <textarea
-                  class="form-control"
-                  rows="8"
-                  v-model="article.body"
-                  placeholder="Write your article (in markdown)">
-                </textarea>
+              <fieldset class="form-group" style="width:100%;float:left;" :height="boxheight">
+                 <markdown-editor id="contentEditor" ref="contentEditor" v-model="article.body"  :zIndex="20"  placeholder="这是一个markdown编辑器"></markdown-editor>
               </fieldset>
-              <fieldset class="form-group">
+              <fieldset class="form-group" style="width:100%;float:left;">
                 <input
                   type="text"
                   class="form-control"
@@ -61,10 +56,14 @@
     </div>
   </div>
 </template>
+<style type="text/css">
+  
+</style>
 <script>
   import { mapGetters } from 'vuex'
   import store from '@/store'
   import RwvListErrors from '@/components/ListErrors'
+  import MarkdownEditor from '@/components/MarkdownEditor'
   import {
     ARTICLE_PUBLISH,
     ARTICLE_EDIT,
@@ -76,7 +75,10 @@
 
   export default {
     name: 'RwvArticleEdit',
-    components: { RwvListErrors },
+    components: {
+      RwvListErrors,
+      MarkdownEditor
+    },
     props: {
       previousArticle: {
         type: Object,

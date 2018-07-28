@@ -5,12 +5,7 @@
     </rwv-list-errors>
     <form class="card comment-form" v-on:submit.prevent="onSubmit(slug, comment)">
       <div class="card-block">
-        <textarea
-          class="form-control"
-          v-model="comment"
-          placeholder="Write a comment..."
-          rows="3">
-        </textarea>
+         <markdown-editor id="contentEditor" ref="contentEditor" v-model="comment" :height="150" :zIndex="20"  placeholder="这是一个markdown编辑器"></markdown-editor>
       </div>
       <div class="card-footer">
         <img :src="userImage" class="comment-author-img" />
@@ -23,10 +18,14 @@
 <script>
 import RwvListErrors from '@/components/ListErrors'
 import { COMMENT_CREATE } from '@/store/actions.type'
+import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default {
   name: 'RwvCommentEditor',
-  components: { RwvListErrors },
+  components: {
+    RwvListErrors,
+    MarkdownEditor
+  },
   props: {
     slug: { type: String, required: true },
     content: { type: String, required: false },

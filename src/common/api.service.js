@@ -87,7 +87,7 @@ export const ArticlesService = {
     return ApiService.post('articles/', {article: params})
   },
   update (slug, params) {
-    return ApiService.update('articles/', slug, {article: params})
+    return ApiService.update('articles', slug, {article: params})
   },
   destroy (slug) {
     return ApiService.delete(`articles/${slug}`)

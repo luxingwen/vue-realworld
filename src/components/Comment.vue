@@ -1,9 +1,7 @@
 <template>
   <div class="card">
     <div class="card-block">
-      <p class="card-text">
-        {{ comment.body }}
-      </p>
+      <div v-html="parseMarkdown(comment.body)"></div>
     </div>
     <div class="card-footer">
       <a href="" class="comment-author">
@@ -21,6 +19,7 @@
 </template>
 <script>
   import { mapGetters } from 'vuex'
+  import marked from 'marked'
   import { COMMENT_DESTROY } from '@/store/actions.type'
 
   export default {
@@ -41,6 +40,9 @@
       ])
     },
     methods: {
+      parseMarkdown (content) {
+        return marked(content)
+      },
       destroy (slug, commentId) {
         this.$store.dispatch(COMMENT_DESTROY, { slug, commentId })
       }

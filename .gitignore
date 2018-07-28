@@ -27,3 +27,4 @@ test/unit/coverage
 test/e2e/reports
 
 package-lock.json
+rsync.sh
