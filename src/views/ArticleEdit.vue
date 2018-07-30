@@ -11,14 +11,18 @@
                   type="text"
                   class="form-control form-control-lg"
                   v-model="article.title"
-                  placeholder="Article Title">
+                  placeholder="我是标题，不少于四个字符">
               </fieldset>
               <fieldset class="form-group">
-                <input
+                  <el-select  placeholder="请选择类型" value-key="id" v-model="typevalue" style="width:100%;">
+                     <el-option v-for="item in types" :label="item.name" :key="item.id"  :value="item">
+                     </el-option>
+                  </el-select>
+                <!-- <input
                   type="text"
                   class="form-control"
                   v-model="article.description"
-                  placeholder="What's this article about?">
+                  placeholder="What's this article about?"> -->
               </fieldset>
               <fieldset class="form-group" style="width:100%;float:left;">
                  <markdown-editor id="contentEditor" ref="contentEditor" v-model="article.body"  :zIndex="20"  placeholder="这是一个markdown编辑器"></markdown-editor>
@@ -27,9 +31,10 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter tags"
+                  placeholder="按回车键或者空格键加标签"
                   v-model="tagInput"
-                  v-on:keypress.enter.prevent="addTag(tagInput)">
+                  v-on:keypress.enter.prevent="addTag(tagInput)"
+                  v-on:keypress.space.prevent="addTag(tagInput)">
                 <div class="tag-list">
                   <span
                     class="tag-default tag-pill"
@@ -64,6 +69,7 @@
   import store from '@/store'
   import RwvListErrors from '@/components/ListErrors'
   import MarkdownEditor from '@/components/MarkdownEditor'
+  import request from '@/utils/request'
   import {
     ARTICLE_PUBLISH,
     ARTICLE_EDIT,
@@ -111,6 +117,8 @@
       return {
         tagInput: null,
         inProgress: false,
+        types: [],
+        typevalue: '',
         errors: {}
       }
     },
@@ -123,6 +131,7 @@
       onPublish (slug, article) {
         let action = slug ? ARTICLE_EDIT : ARTICLE_PUBLISH
         this.inProgress = true
+        article.typeId = this.typevalue.id
         this.$store
           .dispatch(action)
           .then(({ data }) => {
@@ -135,6 +144,10 @@
           .catch(({ response }) => {
             this.inProgress = false
             this.errors = response.data.errors
+            article.title = ''
+            article.description = ''
+            article.body = ''
+            article.tagList = []
           })
       },
       removeTag (tag) {
@@ -144,6 +157,15 @@
         this.$store.dispatch(ARTICLE_EDIT_ADD_TAG, tag)
         this.tagInput = null
       }
+    },
+    mounted () {
+      request({
+        url: '/types/',
+        method: 'get'
+      }).then(resData => {
+        this.types = resData.data.types
+        console.log(this.types)
+      })
     }
   }
 </script>

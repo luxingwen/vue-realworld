@@ -9,9 +9,9 @@
               Have an account?
             </router-link>
           </p>
-          <ul v-if="errors" class="error-messages">
+        <!--   <ul v-if="errors" class="error-messages">
             <li v-for="(v, k) in errors" :key="k">{{k}} {{ v | error }}</li>
-          </ul>
+          </ul> -->
           <form v-on:submit.prevent="onSubmit">
             <fieldset class="form-group">
               <input class="form-control form-control-lg" type="text" v-model="username" placeholder="Username">
@@ -34,6 +34,7 @@
 <script>
 import { mapState } from 'vuex'
 import { REGISTER } from '@/store/actions.type'
+// import { Message } from 'element-ui'
 
 export default {
   name: 'RwvRegister',
@@ -41,12 +42,15 @@ export default {
     return {
       username: '',
       email: '',
+      errors: {},
       password: ''
     }
   },
   computed: {
     ...mapState({
-      errors: state => state.auth.errors
+      errors: state => {
+        console.log(state.auth.errors)
+      }
     })
   },
   methods: {

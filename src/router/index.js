@@ -23,6 +23,11 @@ export default new Router({
           path: 'tag/:tag',
           name: 'home-tag',
           component: () => import('@/views/HomeTag')
+        },
+        {
+          path: 'type/:type',
+          name: 'home-type',
+          component: () => import('@/views/HomeType')
         }
       ]
     },

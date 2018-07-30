@@ -3,17 +3,41 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import JwtService from '@/common/jwt.service'
 import { API_URL } from '@/common/config'
+import { Message } from 'element-ui'
 
-// 创建axios实例
-const myservice = axios.create({
+const service = axios.create({
   baseURL: API_URL, // api的base_url
-  timeout: 10000, // 请求超时时间
-  withCredentials: true,
-  responseType: 'json',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
+  timeout: 5000 // request timeout
 })
+
+service.interceptors.request.use(config => {
+  return config
+}, error => {
+  console.log(error)
+  Promise.reject(error)
+})
+
+service.interceptors.response.use(
+  response => {
+    const res = response.data
+    if (res.code !== 0) {
+      Message({
+        message: res.msg,
+        type: 'error',
+        duration: 5 * 1000
+      })
+    } else {
+      return res
+    }
+  }, error => {
+    console.log('err' + error)
+    Message({
+      message: error.data.msg,
+      type: 'error',
+      duration: 5 * 1000
+    })
+    return Promise.reject(error)
+  })
 
 const ApiService = {
   init () {
@@ -26,7 +50,7 @@ const ApiService = {
   },
 
   query (resource, params) {
-    return Vue.axios
+    return service
       .get(resource, params)
       .catch((error) => {
         throw new Error(`[RWV] ApiService ${error}`)
@@ -34,7 +58,7 @@ const ApiService = {
   },
 
   get (resource, slug = '') {
-    return Vue.axios
+    return service
       .get(`${resource}/${slug}`)
       .catch((error) => {
         throw new Error(`[RWV] ApiService ${error}`)
@@ -43,26 +67,25 @@ const ApiService = {
 
   post (resource, params) {
     console.log(resource)
-    return myservice.post(`${resource}`, params)
+    return service.post(`${resource}`, params)
   },
 
   update (resource, slug, params) {
-    return Vue.axios.put(`${resource}/${slug}`, params)
+    return service.put(`${resource}/${slug}`, params)
   },
 
   put (resource, params) {
-    return Vue.axios
+    return service
       .put(`${resource}`, params)
   },
 
   delete (resource) {
-    return Vue.axios
+    return service
       .delete(resource)
       .catch((error) => {
         throw new Error(`[RWV] ApiService ${error}`)
       })
   }
-
 }
 
 export default ApiService
@@ -73,8 +96,23 @@ export const TagsService = {
   }
 }
 
+export const TypesService = {
+  get () {
+    return ApiService.get('types')
+  }
+}
+
+export const TopUsersService = {
+  get () {
+    return ApiService.get('top_user')
+  }
+}
+
 export const ArticlesService = {
   query (type, params) {
+    if (type !== 'feed') {
+      params.type = type
+    }
     return ApiService
       .query(
         'articles/' + (type === 'feed' ? 'feed' : ''),

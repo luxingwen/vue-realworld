@@ -42,7 +42,7 @@ export default {
       this.$store
         .dispatch(COMMENT_CREATE, { slug, comment })
         .then(() => {
-          this.comment = null
+          this.comment = ''
           this.errors = {}
         })
         .catch(({ response }) => {

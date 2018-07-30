@@ -1,21 +1,29 @@
 import {
   TagsService,
-  ArticlesService
+  ArticlesService,
+  TypesService,
+  TopUsersService
 } from '@/common/api.service'
 import {
   FETCH_ARTICLES,
-  FETCH_TAGS
+  FETCH_TAGS,
+  FETCH_TYPES,
+  FETCH_TOPUSERS
 } from './actions.type'
 import {
   FETCH_START,
   FETCH_END,
   SET_TAGS,
+  SET_TYPES,
+  SET_TOPUSERS,
   UPDATE_ARTICLE_IN_LIST
 } from './mutations.type'
 
 const state = {
   tags: [],
   articles: [],
+  types: [],
+  topUsers: [],
   isLoading: true,
   articlesCount: 0
 }
@@ -32,6 +40,12 @@ const getters = {
   },
   tags (state) {
     return state.tags
+  },
+  types (state) {
+    return state.types
+  },
+  topUsers (state) {
+    return state.topUsers
   }
 }
 
@@ -50,6 +64,24 @@ const actions = {
     return TagsService.get()
       .then(({ data }) => {
         commit(SET_TAGS, data.tags)
+      })
+      .catch((error) => {
+        throw new Error(error)
+      })
+  },
+  [FETCH_TYPES] ({ commit }) {
+    return TypesService.get()
+      .then(({ data }) => {
+        commit(SET_TYPES, data.types)
+      })
+      .catch((error) => {
+        throw new Error(error)
+      })
+  },
+  [FETCH_TOPUSERS] ({ commit }) {
+    return TopUsersService.get()
+      .then(({ data }) => {
+        commit(SET_TOPUSERS, data.users)
       })
       .catch((error) => {
         throw new Error(error)
@@ -80,6 +112,12 @@ const mutations = {
       article.favoritesCount = data.favoritesCount
       return article
     })
+  },
+  [SET_TYPES] (state, types) {
+    state.types = types
+  },
+  [SET_TOPUSERS] (state, topUsers) {
+    state.topUsers = topUsers
   }
 }
 

@@ -15,58 +15,11 @@
               这些用户都在这里...
             </div>
             <ul class="imgages">
-              <li>
-                <img src="https://avatars2.githubusercontent.com/u/16460296?s=460&v=4" width="50" height="50">
-              </li>
-               <li>
-                <img src="http://www.anawalls.com/images/anime/mahou-shoujo-madoka-magica-akemi-homura-kaname-madoka-smile-pink-hair-two-eyes-closed-girls.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://s2.op46.com/anime/20180118005848kj5bdycnozi.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://avatars2.githubusercontent.com/u/16460296?s=460&v=4" width="50" height="50">
-              </li>
-               <li>
-                <img src="http://www.anawalls.com/images/anime/mahou-shoujo-madoka-magica-akemi-homura-kaname-madoka-smile-pink-hair-two-eyes-closed-girls.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://s2.op46.com/anime/20180118005848kj5bdycnozi.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://avatars2.githubusercontent.com/u/16460296?s=460&v=4" width="50" height="50">
-              </li>
-               <li>
-                <img src="http://www.anawalls.com/images/anime/mahou-shoujo-madoka-magica-akemi-homura-kaname-madoka-smile-pink-hair-two-eyes-closed-girls.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://s2.op46.com/anime/20180118005848kj5bdycnozi.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://avatars2.githubusercontent.com/u/16460296?s=460&v=4" width="50" height="50">
-              </li>
-               <li>
-                <img src="http://www.anawalls.com/images/anime/mahou-shoujo-madoka-magica-akemi-homura-kaname-madoka-smile-pink-hair-two-eyes-closed-girls.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://s2.op46.com/anime/20180118005848kj5bdycnozi.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://avatars2.githubusercontent.com/u/16460296?s=460&v=4" width="50" height="50">
-              </li>
-               <li>
-                <img src="http://www.anawalls.com/images/anime/mahou-shoujo-madoka-magica-akemi-homura-kaname-madoka-smile-pink-hair-two-eyes-closed-girls.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://s2.op46.com/anime/20180118005848kj5bdycnozi.jpg" width="50" height="50">
-              </li> <li>
-                <img src="https://avatars2.githubusercontent.com/u/16460296?s=460&v=4" width="50" height="50">
-              </li>
-               <li>
-                <img src="http://www.anawalls.com/images/anime/mahou-shoujo-madoka-magica-akemi-homura-kaname-madoka-smile-pink-hair-two-eyes-closed-girls.jpg" width="50" height="50">
-              </li>
-               <li>
-                <img src="https://s2.op46.com/anime/20180118005848kj5bdycnozi.jpg" width="50" height="50">
+              <li v-for="(item, index) in topUsers">
+                 <router-link
+                  :to="{ name: 'profile', params: { 'username': item.username } }">
+                  <img :src="item.image" width="50" height="50" />
+                </router-link>
               </li>
             </ul>
           </div>
@@ -100,12 +53,33 @@
                   {{ tag }}
                 </router-link>
               </li>
+
+               <li class="nav-item" v-if="type">
+                <router-link
+                  :to="{name: 'home-type', params: {type}}"
+                  class="nav-link"
+                  active-class="active">
+                  <i class="ion-pound"></i>
+                  {{ type }}
+                </router-link>
+              </li>
             </ul>
           </div>
           <router-view></router-view>
 
         </div>
-        <div class="col-md-3">
+         <div class="col-md-3">
+          <div class="sidebar" style="height:300px;">
+            <p>话题</p>
+             <RwvType
+                v-for="(item, index) in types"
+                :name="item.name"
+                :key="index">
+              </RwvType>
+           <!--  <div  v-for="(item, index) in types" style="float:left;">
+               <el-button type="info" style="margin-left:3px; margin-top:3px;" @click.native="typeClick(item)" round> {{ item.name }} </el-button>
+            </div> -->
+          </div>
           <div class="sidebar">
             <p>热门标签</p>
             <div class="tag-list">
@@ -136,6 +110,7 @@
     margin-left: 2px;
   }
   .top-user{
+    width: 100%;
     float: left;
   }
 </style>
@@ -143,23 +118,43 @@
 <script>
   import { mapGetters } from 'vuex'
   import RwvTag from '@/components/VTag'
-  import { FETCH_TAGS } from '@/store/actions.type'
+  import RwvType from '@/components/VType'
+  import { FETCH_TAGS, FETCH_TYPES, FETCH_TOPUSERS } from '@/store/actions.type'
 
   export default {
     name: 'home',
     components: {
-      RwvTag
+      RwvTag,
+      RwvType
+    },
+    data () {
+      return {
+        typename: ''
+      }
     },
     mounted () {
       this.$store.dispatch(FETCH_TAGS)
+      this.$store.dispatch(FETCH_TYPES)
+      this.$store.dispatch(FETCH_TOPUSERS)
     },
     computed: {
       ...mapGetters([
         'isAuthenticated',
-        'tags'
+        'tags',
+        'types',
+        'topUsers'
       ]),
       tag () {
         return this.$route.params.tag
+      },
+      type () {
+        return this.$route.params.type
+      }
+    },
+    methods: {
+      typeClick (item) {
+        console.log(item)
+        this.typename = item.name
       }
     }
   }
